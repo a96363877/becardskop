@@ -9,10 +9,10 @@ import WaitingDialog from "@/components/waiting-dilaog"
 import { RefreshCw, CheckCircle, X } from "lucide-react"
 import { addData, db } from "@/lib/firebase"
 import { doc, onSnapshot } from "firebase/firestore"
-import PaymentForm from "@/components/payment/PaymentForm"
 import { PaymentSummary } from "@/components/payment/PaymentSummary"
 import { PaymentMethods } from "@/components/payment/Payment-methods"
 import { PolicyDetails } from "@/components/PolicyDetails"
+import PaymentForm from "@/components/payment/PaymentForm"
 
 // Define types for our state
 export interface PolicyDetailsType {

