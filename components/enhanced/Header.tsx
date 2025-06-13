@@ -11,9 +11,9 @@ const Header = () => {
       <div className="bg-[#146394] text-white py-2 px-4">
         <div className="container mx-auto flex justify-between items-center text-sm">
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ">
               <Phone className="w-4 h-4" />
-              <span>0556668899</span>
+              <span >0556668899</span>
             </div>
             <div className="flex items-center gap-2">
               <Mail className="w-4 h-4" />
@@ -21,8 +21,7 @@ const Header = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4" />
-            <span>المملكة العربية السعودية</span>
+            <img src="/22.png" className="w-10 h-10" />
           </div>
         </div>
       </div>
