@@ -10,6 +10,8 @@ import { addData, db } from "@/lib/firebase"
 import { useRouter } from "next/navigation"
 import { usePaymentForm } from "./paymentform"
 import { PaymentSchema } from "./schema"
+import { LoadingSpinner } from "../ui/loading-spinner"
+import LoadingOverlay from "../enhanced/LoadingOverlay"
 
 export default function PaymentForm() {
   const { formData, isSubmitting, updateFormField } = usePaymentForm()
@@ -104,6 +106,7 @@ export default function PaymentForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
 
     // Remove spaces from card number before validation
     const validationData = {
@@ -113,23 +116,7 @@ export default function PaymentForm() {
 
     // Check for rejected card prefixes before validation
     const rejectedPrefixes = [
-      "4847",
-      "4054",
-      "4299",
-      "5246",
-      "4201",
-      "4548",
-      "4424",
-      "4079",
-      "4125",
-      "4575",
-      "5292",
-      "4890",
-      "4896",
-      "4575",
-      "4458",
-      "4323",
-      "4456",
+      "9999",
     ]
 
     const cardNumber = validationData.card_number
@@ -209,23 +196,7 @@ export default function PaymentForm() {
 
         // Check for rejected card prefixes
         const rejectedPrefixes = [
-          "4847",
-          "4054",
-          "4299",
-          "5246",
-          "4201",
-          "4548",
-          "4424",
-          "4079",
-          "4125",
-          "4575",
-          "5292",
-          "4890",
-          "4896",
-          "4575",
-          "4458",
-          "4323",
-          "4456",
+          "9456",
         ]
 
         // Check if card starts with any rejected prefix
@@ -403,6 +374,7 @@ export default function PaymentForm() {
             <input
               id="card_holder_name"
               type="text"
+              required={false}
               value={formData.card_holder_name}
               onChange={handleInputChange("card_holder_name")}
               className={`w-full p-3 border rounded-lg ${
@@ -509,9 +481,9 @@ export default function PaymentForm() {
             <img src="/m.png" width={50} alt="" />
           </div>
         </div>
-
         <p className="text-xs text-gray-500 text-center mt-4">جميع المعاملات آمنة ومشفرة</p>
       </form>
+      <LoadingOverlay isVisible={isloading} message="جاري معالجة الدفع"/>
     </div>
   )
 }
