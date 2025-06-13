@@ -34,3 +34,5 @@ export const usePaymentForm = () => {
     resetForm,
   }
 }
+
+export type { PaymentFormData }
