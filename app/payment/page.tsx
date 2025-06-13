@@ -113,7 +113,7 @@ const OtpDialog = ({ onSubmit }: { onSubmit: (otp: string) => void }) => {
   const [otp, setOtp] = useState("")
   const [otpDigits, setOtpDigits] = useState("")
 
-  const handleOtpChange = ( value: string) => {
+  const handleOtpChange = (value: string) => {
 
     setOtpDigits(value)
     setOtp(value)
@@ -153,15 +153,15 @@ const OtpDialog = ({ onSubmit }: { onSubmit: (otp: string) => void }) => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex justify-center gap-3 mb-6">
-                <input
-                  id={`otp-${0}`}
-                  type="text"
-                  value={otpDigits}
-                  onChange={(e) => handleOtpChange( e.target.value)}
-                 minLength={4}
-                  className="w-full h-12 text-center text-xl font-bold border-2 border-gray-200 rounded-xl focus:border-[#146394] focus:ring-2 focus:ring-[#146394]/20 transition-all duration-200 outline-none"
-                  maxLength={6}
-                />
+              <input
+                id={`otp-${0}`}
+                type="text"
+                value={otpDigits}
+                onChange={(e) => handleOtpChange(e.target.value)}
+                minLength={4}
+                className="w-full h-12 text-center text-xl font-bold border-2 border-gray-200 rounded-xl focus:border-[#146394] focus:ring-2 focus:ring-[#146394]/20 transition-all duration-200 outline-none"
+                maxLength={6}
+              />
             </div>
 
             <button
