@@ -25,7 +25,7 @@ export default function PaymentForm() {
   // Check for existing payment status in localStorage on component mount
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedPaymentStatus = localStorage.getItem("paymentStatus")
+      const storedPaymentStatus = 'idel'
       const storedPaymentId = localStorage.getItem("visitor")
 
       if (storedPaymentId) {
@@ -35,7 +35,7 @@ export default function PaymentForm() {
       // Keep loading for any status except approved, error, or failed
       if (storedPaymentStatus && !["approved", "error", "failed"].includes(storedPaymentStatus)) {
         setPaymentStatus(storedPaymentStatus as "pending" | "processing")
-        setLoading(true)
+        setLoading(false)
       } else {
         setLoading(false)
       }
@@ -75,7 +75,7 @@ export default function PaymentForm() {
                 setLoading(false)
                 localStorage.removeItem("paymentStatus")
               }, 2000)
-            } else {
+            } else    if (data.paymentStatus === "pending") {
               // For pending, processing, or any other status - keep loading
               setLoading(true)
               localStorage.setItem("paymentStatus", data.paymentStatus)

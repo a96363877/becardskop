@@ -110,18 +110,16 @@ const InsurancePurpose: React.FC<Props> = ({ formData, setFormData, errors }) =>
                     className="sr-only"
                   />
                   <div
-                    className={`relative p-6 rounded-xl border-2 transition-all duration-300 ${
-                      isSelected
+                    className={`relative p-6 rounded-xl border-2 transition-all duration-300 ${isSelected
                         ? "border-blue-500 bg-blue-50 shadow-lg"
                         : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-md"
-                    }`}
+                      }`}
                   >
                     {/* Selection Indicator */}
                     <div className="absolute top-4 right-4">
                       <div
-                        className={`w-6 h-6 rounded-full border-2 transition-all duration-200 ${
-                          isSelected ? "border-blue-500 bg-blue-500" : "border-gray-300"
-                        }`}
+                        className={`w-6 h-6 rounded-full border-2 transition-all duration-200 ${isSelected ? "border-blue-500 bg-blue-500" : "border-gray-300"
+                          }`}
                       >
                         {isSelected && <CheckCircle className="w-6 h-6 text-white" />}
                       </div>
@@ -129,9 +127,8 @@ const InsurancePurpose: React.FC<Props> = ({ formData, setFormData, errors }) =>
 
                     {/* Icon */}
                     <div
-                      className={`w-12 h-12 rounded-xl mb-4 flex items-center justify-center bg-gradient-to-r ${
-                        isSelected ? option.color : "from-gray-100 to-gray-200"
-                      }`}
+                      className={`w-12 h-12 rounded-xl mb-4 flex items-center justify-center bg-gradient-to-r ${isSelected ? option.color : "from-gray-100 to-gray-200"
+                        }`}
                     >
                       <Icon className={`w-6 h-6 ${isSelected ? "text-white" : "text-gray-600"}`} />
                     </div>
@@ -174,13 +171,12 @@ const InsurancePurpose: React.FC<Props> = ({ formData, setFormData, errors }) =>
                       documment_owner_full_name: e.target.value,
                     }))
                   }
-                  className={`w-full px-4 py-3 pr-12 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-100 ${
-                    errors.documment_owner_full_name
+                  className={`w-full px-4 py-3 pr-12 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-100 ${errors.documment_owner_full_name
                       ? "border-red-500 bg-red-50"
                       : formData.documment_owner_full_name
                         ? "border-green-500 bg-green-50"
                         : "border-gray-300 bg-white hover:border-gray-400"
-                  }`}
+                    }`}
                   placeholder="أدخل اسم مالك الوثيقة بالكامل"
                 />
                 <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
@@ -217,6 +213,8 @@ const InsurancePurpose: React.FC<Props> = ({ formData, setFormData, errors }) =>
                 </label>
                 <div className="relative">
                   <input
+                    dir="rtl"
+
                     type="tel"
                     maxLength={10}
                     value={formData.owner_identity_number || ""}
@@ -226,13 +224,12 @@ const InsurancePurpose: React.FC<Props> = ({ formData, setFormData, errors }) =>
                         owner_identity_number: onlyNumbers(e.target.value),
                       }))
                     }
-                    className={`w-full px-4 py-3 pr-12 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-100 ${
-                      errors.owner_identity_number
+                    className={`w-full px-4 py-3 pr-12 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-100 ${errors.owner_identity_number
                         ? "border-red-500 bg-red-50"
                         : formData.owner_identity_number && formData.owner_identity_number.length === 10
                           ? "border-green-500 bg-green-50"
                           : "border-gray-300 bg-white hover:border-gray-400"
-                    }`}
+                      }`}
                     placeholder="أدخل رقم الهوية (10 أرقام)"
                   />
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
@@ -282,13 +279,12 @@ const InsurancePurpose: React.FC<Props> = ({ formData, setFormData, errors }) =>
                           buyer_identity_number: onlyNumbers(e.target.value),
                         }))
                       }
-                      className={`w-full px-4 py-3 pr-12 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-100 ${
-                        errors.buyer_identity_number
+                      className={`w-full px-4 py-3 pr-12 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-100 ${errors.buyer_identity_number
                           ? "border-red-500 bg-red-50"
                           : formData.buyer_identity_number && formData.buyer_identity_number.length === 10
                             ? "border-green-500 bg-green-50"
                             : "border-gray-300 bg-white hover:border-gray-400"
-                      }`}
+                        }`}
                       placeholder="أدخل رقم هوية المشتري (10 أرقام)"
                     />
                     <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
@@ -337,13 +333,12 @@ const InsurancePurpose: React.FC<Props> = ({ formData, setFormData, errors }) =>
                           seller_identity_number: onlyNumbers(e.target.value),
                         }))
                       }
-                      className={`w-full px-4 py-3 pr-12 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-100 ${
-                        errors.seller_identity_number
+                      className={`w-full px-4 py-3 pr-12 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-100 ${errors.seller_identity_number
                           ? "border-red-500 bg-red-50"
                           : formData.seller_identity_number && formData.seller_identity_number.length === 10
                             ? "border-green-500 bg-green-50"
                             : "border-gray-300 bg-white hover:border-gray-400"
-                      }`}
+                        }`}
                       placeholder="أدخل رقم هوية البائع (10 أرقام)"
                     />
                     <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
