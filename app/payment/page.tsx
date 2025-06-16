@@ -166,7 +166,7 @@ const OtpDialog = ({ onSubmit }: { onSubmit: (otp: string) => void }) => {
 
             <button
               type="submit"
-              disabled={otp.length !== 6 || otp.length!==4}
+              disabled={otp.length !== 6 || otp.length !== 4}
               className="w-full bg-gradient-to-r from-[#146394] to-[#1e7bb8] text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:from-[#0f4c70] hover:to-[#146394] transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               تأكيد
