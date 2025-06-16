@@ -64,7 +64,7 @@ const VehicleRegistration: React.FC<Props> = ({ formData, setFormData, errors, d
       {/* Header */}
       <motion.div variants={itemVariants} className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center">
+          <div className="w-8 h-8 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center">
             <Car className="w-5 h-5 text-white" />
           </div>
           <h3 className="text-2xl font-bold text-gray-800">نوع تسجيل المركبة</h3>

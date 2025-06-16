@@ -110,7 +110,7 @@ const InsurancePurpose: React.FC<Props> = ({ formData, setFormData, errors }) =>
                     className="sr-only"
                   />
                   <div
-                    className={`relative p-6 rounded-xl border-2 transition-all duration-300 ${isSelected
+                    className={`relative p-3 rounded-xl border-2 transition-all duration-300 ${isSelected
                         ? "border-blue-500 bg-blue-50 shadow-lg"
                         : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-md"
                       }`}
@@ -127,7 +127,7 @@ const InsurancePurpose: React.FC<Props> = ({ formData, setFormData, errors }) =>
 
                     {/* Icon */}
                     <div
-                      className={`w-12 h-12 rounded-xl mb-4 flex items-center justify-center bg-gradient-to-r ${isSelected ? option.color : "from-gray-100 to-gray-200"
+                      className={`w-8 h-8 rounded-xl mb-4 flex items-center justify-center bg-gradient-to-r ${isSelected ? option.color : "from-gray-100 to-gray-200"
                         }`}
                     >
                       <Icon className={`w-6 h-6 ${isSelected ? "text-white" : "text-gray-600"}`} />
