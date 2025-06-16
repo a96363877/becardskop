@@ -75,7 +75,7 @@ const InsurancePurpose: React.FC<Props> = ({ formData, setFormData, errors }) =>
       className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-6 border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300"
     >
       {/* Header */}
-      <motion.div variants={itemVariants} className="mb-8">
+      <motion.div variants={itemVariants} className="mb-8" dir="rtl">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
             <User className="w-5 h-5 text-white" />
@@ -91,7 +91,6 @@ const InsurancePurpose: React.FC<Props> = ({ formData, setFormData, errors }) =>
           <label className="block text-sm font-semibold text-gray-700 mb-3">نوع الخدمة المطلوبة</label>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {purposeOptions.map((option) => {
-              const Icon = option.icon
               const isSelected = formData.insurance_purpose === option.value
 
               return (
@@ -130,7 +129,6 @@ const InsurancePurpose: React.FC<Props> = ({ formData, setFormData, errors }) =>
                       className={`w-8 h-8 rounded-xl mb-4 flex items-center justify-center bg-gradient-to-r ${isSelected ? option.color : "from-gray-100 to-gray-200"
                         }`}
                     >
-                      <Icon className={`w-6 h-6 ${isSelected ? "text-white" : "text-gray-600"}`} />
                     </div>
 
                     {/* Content */}
